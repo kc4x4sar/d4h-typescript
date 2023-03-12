@@ -34,16 +34,16 @@ export interface MemberStatusLabel {
 export interface Member {
     address: string;
     custom_fields: CustomField[];
-    email: string;
+    email?: string;
     emergency_contacts: EmergencyContact;
-    group_ids: number[];
+    group_ids?: number[];
     homephone: string;
     id: number;
-    mobilephone: string;
+    mobilephone?: string;
     name: string;
     notes: string;
     position: string;
-    ref: string;
+    ref?: string;
     status: MemberStatus;
     workphone: string;
 }
