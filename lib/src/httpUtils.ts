@@ -46,8 +46,8 @@ export default class HttpUtils {
         let offset = 0;
         while (true) {
             let urlWithOffset = new URL(url);
-            url.searchParams.append('offset', offset.toString());
-            url.searchParams.append('limit', this._fetchLimit.toString());
+            urlWithOffset.searchParams.append('offset', offset.toString());
+            urlWithOffset.searchParams.append('limit', this._fetchLimit.toString());
     
             let newResults = await this.get<DataType[]>(urlWithOffset);
             results = results.concat(newResults);

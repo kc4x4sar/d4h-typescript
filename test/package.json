@@ -1,15 +1,16 @@
 {
-  "name": "d4h-typescript",
+  "name": "d4h-typescript-test",
   "version": "1.0.0",
   "main": "./built/index.js",
   "license": "MIT",
-  "type": "module",
   "scripts": {
-    "build": "npx tsc"
+    "build": "npx tsc",
+    "launch": "npm run build && node ./built"
   },
   "devDependencies": {
     "typescript": "^4.8.4"
   },
   "dependencies": {
+    "d4h-typescript": "file:../lib"
   }
 }
