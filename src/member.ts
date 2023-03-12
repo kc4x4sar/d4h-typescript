@@ -1,9 +1,15 @@
+export enum CustomFieldType {
+    Number = "number",
+    Text = "text",
+    Date = "date",
+}
+
 export interface CustomField {
     id: number;
-    type: string;
+    type: CustomFieldType;
     label: string;
-    value_string: string;
-    value: string;
+    value_string: string | undefined;
+    value: string | undefined;
 }
 
 export interface EmergencyContact {
@@ -30,6 +36,7 @@ export interface Member {
     custom_fields: CustomField[];
     email: string;
     emergency_contacts: EmergencyContact;
+    group_ids: number[];
     homephone: string;
     id: number;
     mobilephone: string;
