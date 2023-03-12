@@ -1,7 +1,13 @@
-import D4H, { GetMembersOptions } from "d4h-typescript"
-import Config from "./config"
+// Import environment variables before anything else
+import * as dotenv from "dotenv"
+dotenv.config();
 
-let api = new D4H(Config.d4hToken);
+import D4H, { GetMembersOptions } from "d4h-typescript"
+import { env } from "process"
+
+const token = env["D4H_TOKEN"]!;
+
+let api = new D4H(token);
 
 let getMembersOptions: GetMembersOptions = {
     includeDetails: true,
