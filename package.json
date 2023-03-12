@@ -1,0 +1,16 @@
+{
+  "name": "d4h-typescript",
+  "version": "1.0.0",
+  "main": "./built/index.js",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "npx tsc"
+  },
+  "devDependencies": {
+    "typescript": "^4.8.4"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.0"
+  }
+}

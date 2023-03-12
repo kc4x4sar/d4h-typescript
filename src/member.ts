@@ -1,0 +1,42 @@
+export interface CustomField {
+    id: number;
+    type: string;
+    label: string;
+    value_string: string;
+    value: string;
+}
+
+export interface EmergencyContact {
+    name: string;
+    relation: string;
+    phone: string;
+    alt_phone: string;
+}
+
+export interface MemberStatus {
+    id: number;
+    type: string;
+    value: string;
+    label: MemberStatusLabel | undefined;
+}
+
+export interface MemberStatusLabel {
+    id: number;
+    value: string;
+}
+
+export interface Member {
+    address: string;
+    custom_fields: CustomField[];
+    email: string;
+    emergency_contacts: EmergencyContact;
+    homephone: string;
+    id: number;
+    mobilephone: string;
+    name: string;
+    notes: string;
+    position: string;
+    ref: string;
+    status: MemberStatus;
+    workphone: string;
+}
