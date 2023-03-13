@@ -52,7 +52,7 @@ export default class D4H {
             let optionsList = url.searchParams;
 
             if (options.groupId !== undefined) {
-                optionsList.append("group_id", "true");
+                optionsList.append("group_id", options.groupId.toString());
             }
 
             if (options.includeDetails !== undefined) {
