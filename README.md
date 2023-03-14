@@ -37,3 +37,5 @@ The available commands are:
 * launch: `npm run launch`
 
 Build simply builds the test project, while launch both builds and runs it. If you've made changes to lib, be sure to build there first.
+
+Before launching, you should setup environment variables. `sample.env` shows you what variables are necessary. Copy the contents to a new file, `.env`, in the same folder and populate it appropriately.
