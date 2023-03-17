@@ -1,7 +1,7 @@
 export enum CustomFieldType {
-    Number = "number",
-    Text = "text",
-    Date = "date",
+    Number = 'number',
+    Text = 'text',
+    Date = 'date',
 }
 
 export interface CustomField {

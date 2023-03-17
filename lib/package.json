@@ -4,10 +4,17 @@
   "main": "./built/index.js",
   "license": "MIT",
   "scripts": {
-    "build": "npx tsc"
+    "launch": "npm run build && node .",
+    "build": "npm run lint && npx tsc",
+    "build-submodules": "cd ./submodules/d4h-typescript/lib && npm run build",
+    "clean": "npx tsc --build --clean",
+    "lint": "eslint --ext .ts,.d.ts ./src"
   },
   "devDependencies": {
-    "typescript": "^4.8.4"
+    "typescript": "^4.8.4",
+    "@typescript-eslint/eslint-plugin": "^5.55.0",
+    "@typescript-eslint/parser": "^5.55.0",
+    "eslint": "^8.36.0"
   },
   "dependencies": {
   }

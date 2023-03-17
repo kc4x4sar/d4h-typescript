@@ -1,5 +1,5 @@
-import D4H from './src/d4h.js';
-export default D4H;
+import D4H from './src/d4h.js'
+export default D4H
 
 export * from './src/d4h.js'
 export * from './src/group.js'

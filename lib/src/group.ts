@@ -1,5 +1,5 @@
 export interface Group {
-    bundle: string;
-    id: number;
-    title: string;
+    bundle: string
+    id: number
+    title: string
 }
