@@ -33,7 +33,7 @@ export default class HttpUtils {
             'Content-Type': 'application/json'
         }
     
-        console.log(url)
+        console.log(`${method}: ${url.toString()}\n${JSON.stringify(body)}`)
 
         const options: RequestInit = {
             method,

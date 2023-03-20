@@ -4,7 +4,8 @@
   "main": "./built/index.js",
   "license": "MIT",
   "scripts": {
-    "build": "npx tsc",
+    "build": "npm run build-lib && npx tsc",
+    "build-lib": "cd ../lib && npm run build",
     "launch": "npm run build && node ./built"
   },
   "devDependencies": {

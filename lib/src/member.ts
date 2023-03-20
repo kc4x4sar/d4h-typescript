@@ -1,16 +1,4 @@
-export enum CustomFieldType {
-    Number = 'number',
-    Text = 'text',
-    Date = 'date',
-}
-
-export interface CustomField {
-    id: number;
-    type: CustomFieldType;
-    label: string;
-    value_string: string | null;
-    value: string | null;
-}
+import { Entity } from './entity'
 
 export interface EmergencyContact {
     name: string | null;
@@ -31,14 +19,12 @@ export interface MemberStatusLabel {
     value: string;
 }
 
-export interface Member {
+export interface Member extends Entity {
     address: string;
-    custom_fields?: CustomField[];
     email: string | null;
     emergency_contacts: EmergencyContact[];
     group_ids: number[] | null;
     homephone: string;
-    id: number;
     mobilephone: string;
     name: string;
     notes: string | null;
