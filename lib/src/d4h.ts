@@ -75,7 +75,12 @@ export default class D4H {
         return members
     }
 
-    updateMemberAsync(id: number, updates: MemberUpdate): Promise<Member> {
+    updateMemberAsync(id: number, updates: MemberUpdate): Promise<void> {
+        // If no updates, no need to actually make a request. Exit early.
+        if (Object.getOwnPropertyNames(updates).length === 0) {
+            return Promise.resolve()
+        }
+
         const url = new URL(`${D4H_BASE_URL}/team/members/${id}`)
         return this._httpUtils.putAsync(url, updates)
     }
@@ -112,6 +117,11 @@ export default class D4H {
     /********************************************/
 
     updateCustomFields(entity: Entity, updates: CustomFieldUpdate[], onlyMemberEditOwn: boolean): Promise<void> {
+        // If no updates, no need to actually make a request. Exit early.
+        if (updates.length === 0) {
+            return Promise.resolve()
+        }
+        
         const url = new URL(`${D4H_BASE_URL}/team/custom-fields/${entity.type}/${entity.id}`)
 
         // From the documentation:
@@ -120,8 +130,11 @@ export default class D4H {
         // from a bundle (or an unbundled field's value) you must include values for all fields
         // of that bundle (or all unbundled fields)
         // ----------------------------------------------------------------------------------------
-        // To ensure a mistake doesn't occur, let's ensure that *all* custom fields from the original
+        // To ensure a mistake doesn't occur, let's ensure that *all* unbundled custom fields from the original
         // entity are in the list of updates.
+        //
+        // At this time we don't actively use any custom fields in a bundle. To save on the additional complexity,
+        // bundled custom fields are not supported and will result in an error if attempting to update them.
 
         // At this time all entities we're working with have custom fields. As a result, throw an
         // error if none are found. This most likely indicates the original request was made without
@@ -135,16 +148,16 @@ export default class D4H {
         // For any fields not being changed, back fill from the original entity to ensure
         // they retain the same value.
         for (const field of originalCustomFields) {
-            if (field.bundle !== null) {
-                throw new Error('One or more custom fields on the entity are part of a bundle. Bundles are not supported.')
-            }
-
             const update = updates.find((u) => u.id == field.id)
-            if (update && onlyMemberEditOwn && !field.member_edit_own) {
-                throw new Error('onlyMemberEditOwn specified, but attempting to update non-memberEditOwn field.')
-            } else if (!update) {
-                let include = true
+            if (update) {
                 if (onlyMemberEditOwn && !field.member_edit_own) {
+                    throw new Error('onlyMemberEditOwn specified, but attempting to update non-memberEditOwn field.')
+                } else if (field.bundle) {
+                    throw new Error('One or more custom fields being updated are part of a bundle. Updating fields in a bundle is not supported.')
+                }
+            } else {
+                let include = true
+                if (field.bundle || (onlyMemberEditOwn && !field.member_edit_own)) {
                     include = false
                 }
 

@@ -22,10 +22,8 @@ let main = async function() {
     // Only execute update code on an instance where that's OK.
     // Double-check your API key. Double-check what you're modifying.
     // try {
-    //     const memberId = 0000 // Set this to a real ID
-    //     await api.updateMemberAsync(memberId, {
-    //         notes: null,
-    //     })
+    //     const memberId = 103636 // Set this to a real ID
+    //     await api.updateMemberAsync(memberId, {})
     // } catch (err) {
     //     console.log(JSON.stringify(err))
     //     return
