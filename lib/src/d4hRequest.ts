@@ -14,7 +14,7 @@ enum HttpMethod {
     Put = 'PUT',
 }
 
-export default class HttpUtils {
+export default class D4HRequest {
     private readonly _fetchLimit: number
     private readonly _token: string
 

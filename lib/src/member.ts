@@ -1,11 +1,5 @@
+import { EmergencyContact } from './emergencyContacts'
 import { Entity } from './entity'
-
-export interface EmergencyContact {
-    name: string | null
-    relation: string | null
-    phone: string | null
-    alt_phone: string | null
-}
 
 export interface MemberStatus {
     id: number

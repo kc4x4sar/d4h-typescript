@@ -1,7 +1,8 @@
 import { CustomFieldUpdate } from './customField'
+import D4HRequest from './d4hRequest'
+import { EmergencyContacts } from './emergencyContacts'
 import { Entity, EntityType } from './entity'
 import type { Group } from './group'
-import HttpUtils from './httpUtils'
 import type { Member, MemberUpdate } from './member'
 
 const D4H_FETCH_LIMIT = 250
@@ -23,10 +24,10 @@ export interface GetGroupsOptions {
 }
 
 export default class D4H {
-    private readonly _httpUtils: HttpUtils
+    private readonly _request: D4HRequest
 
     constructor(token: string) {
-        this._httpUtils = new HttpUtils(token, D4H_FETCH_LIMIT)
+        this._request = new D4HRequest(token, D4H_FETCH_LIMIT)
     }
 
     /********************************************/
@@ -44,7 +45,7 @@ export default class D4H {
             }
         }
 
-        const member = await this._httpUtils.getAsync<Member>(url)
+        const member = await this._request.getAsync<Member>(url)
         member.type = EntityType.Member
 
         return member
@@ -69,7 +70,7 @@ export default class D4H {
             }
         }
 
-        const members = await this._httpUtils.getManyAsync<Member>(url)
+        const members = await this._request.getManyAsync<Member>(url)
         members.forEach(m => m.type = EntityType.Member)
 
         return members
@@ -82,7 +83,21 @@ export default class D4H {
         }
 
         const url = new URL(`${D4H_BASE_URL}/team/members/${id}`)
-        return this._httpUtils.putAsync(url, updates)
+        return this._request.putAsync(url, updates)
+    }
+
+    /********************************************/
+    /*********** EMERGENCY CONTACTS *************/
+    /********************************************/
+
+    getEmergencyContacts(memberId: number): Promise<EmergencyContacts> {
+        const url = new URL(`${D4H_BASE_URL}/team/members/${memberId}/emergency`)
+        return this._request.getAsync(url)
+    }
+
+    updateEmergencyContacts(memberId: number, emergencyContacts: EmergencyContacts): Promise<EmergencyContacts> {
+        const url = new URL(`${D4H_BASE_URL}/team/members/${memberId}/emergency`)
+        return this._request.putAsync(url, emergencyContacts)
     }
 
     /********************************************/
@@ -91,7 +106,7 @@ export default class D4H {
 
     getGroupAsync(id: number): Promise<Group> {
         const url = new URL(`${D4H_BASE_URL}/team/groups/${id}`)
-        return this._httpUtils.getAsync<Group>(url)
+        return this._request.getAsync<Group>(url)
     }
 
     getGroupsAsync(options?: GetGroupsOptions): Promise<Group[]> {
@@ -109,7 +124,7 @@ export default class D4H {
             }
         }
 
-        return this._httpUtils.getManyAsync(url)
+        return this._request.getManyAsync(url)
     }
 
     /********************************************/
@@ -170,6 +185,6 @@ export default class D4H {
             }
         }
 
-        return this._httpUtils.putAsync(url, { fields: updates })
+        return this._request.putAsync(url, { fields: updates })
     }
 }
