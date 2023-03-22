@@ -1,37 +1,38 @@
 import { Entity } from './entity'
 
 export interface EmergencyContact {
-    name: string | null;
-    relation: string | null;
-    phone: string | null;
-    alt_phone: string | null;
+    name: string | null
+    relation: string | null
+    phone: string | null
+    alt_phone: string | null
 }
 
 export interface MemberStatus {
-    id: number;
-    type: string;
-    value: string;
-    label: MemberStatusLabel | null;
+    id: number
+    type: string
+    value: string
+    label: MemberStatusLabel | null
 }
 
 export interface MemberStatusLabel {
-    id: number;
-    value: string;
+    id: number
+    value: string
 }
 
 export interface Member extends Entity {
-    address: string;
-    email: string | null;
-    emergency_contacts: EmergencyContact[];
-    group_ids: number[] | null;
-    homephone: string;
-    mobilephone: string;
-    name: string;
-    notes: string | null;
-    position: string;
-    ref: string;
-    status: MemberStatus;
-    workphone: string;
+    address: string
+    email: string | null
+    emergency_contacts: EmergencyContact[]
+    group_ids: number[] | null
+    homephone: string
+    joined_at: string
+    mobilephone: string
+    name: string
+    notes: string | null
+    position: string
+    ref: string
+    status: MemberStatus
+    workphone: string
 }
 
 export interface MemberUpdate {
