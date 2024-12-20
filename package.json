@@ -1,0 +1,9 @@
+{
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "d4h-typescript": "file:lib",
+    "dotenv": "^16.4.7",
+    "typedoc": "^0.27.5",
+    "typescript": "^5.7.2"
+  }
+}
