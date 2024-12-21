@@ -31,7 +31,9 @@ let main = async function() {
 
     if (testGetMembers) {
         try {
-            const members = await api.getMembersAsync(getMembersOptions)
+            const context = 'team'
+            const contextId = 1234
+            const members = await api.getMembersAsync(context, contextId, getMembersOptions)
             console.log(`Retrieved ${members.length} members.`)
         } catch (err) {
             console.log(JSON.stringify(err))
@@ -41,7 +43,9 @@ let main = async function() {
 
     if (testGetGroups) {
         try {
-            const groups = await api.getGroupsAsync()
+            const context = 'team'
+            const contextId = 1234
+            const groups = await api.getGroupsAsync(context, contextId)
             console.log(`Retrieved ${groups.length} groups.`)
         } catch (err) {
             console.log(JSON.stringify(err))
@@ -51,8 +55,10 @@ let main = async function() {
 
     if (testGetMember) {
         try {
+            const context = 'team'
+            const contextId = 1234
             const memberId = 103636
-            const member = await api.getMemberAsync(memberId, { includeDetails: true })
+            const member = await api.getMemberAsync(context, contextId, memberId, { includeDetails: true })
             console.log(`Retrieved single member: ${member.name}`)
     
             // Only execute update code on an instance where that's OK.

@@ -86,3 +86,10 @@ tests/cases/user/prettier/prettier
 .eslintcache
 *v8.log
 **/*.env
+
+
+getmember.json
+getMembers.ts
+members.json
+getMember.ts
+getIncident.ts

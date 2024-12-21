@@ -1,9 +1,9 @@
-import { CustomField } from './customField'
+import { CustomField } from './types/customField'
 
 export interface Entity {
     custom_fields?: CustomField[];
     id: number;
-    type: EntityType;
+    entityType: EntityType;
 }
 
 // EntityType must be one of:
@@ -13,4 +13,9 @@ export interface Entity {
 // Only the ones actively in use are implemented.
 export enum EntityType {
     Member = 'member',
+    memberGroup = 'membergroup',
+    Incident = 'incident',
+    Qualification = 'qualification',
+    Award = 'award',
+    Animal = 'animal'
 }

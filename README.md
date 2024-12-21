@@ -1,6 +1,12 @@
 # d4h-typescript
 Typescript library for accessing D4H
 
+## Documentation
+
+Typedoc Generated Documentation available at:
+
+```https://chewbaccalakis.github.io/d4h-typescript/modules.html```
+
 ## How to Consume
 This library is not in NPM. As a result, you need to add it to your project locally. To do so, you have three options:
 1. Add the repository to the consuming repository as a Git submodule.
