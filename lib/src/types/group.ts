@@ -1,4 +1,5 @@
 import { Entity } from '../entity'
+import { resourceType } from './type';
 
 export interface memberGroup extends Entity{
     id: number;
@@ -8,4 +9,11 @@ export interface memberGroup extends Entity{
     resourceType: string;
     createdAt: string;
     updatedAt: string;
+}
+
+export interface groupMembership extends Entity{
+    id: number;
+    owner: resourceType;
+    group: resourceType;
+    member: resourceType;
 }

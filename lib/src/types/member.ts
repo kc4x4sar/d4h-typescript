@@ -1,4 +1,5 @@
 import { Entity } from '../entity'
+import { resourceType } from './type'
 
 export interface MemberStatus {
     id: number
@@ -10,16 +11,6 @@ export interface MemberStatus {
 export interface MemberStatusLabel {
     id: number
     value: string
-}
-
-export interface CustomMemberStatus {
-    id: number | null
-    resourceType: string
-}
-
-export interface EquipmentLocation {
-    id: number | null
-    resourceType: string
 }
 
 export interface EmailInfo {
@@ -44,21 +35,6 @@ export interface SecondaryEmergencyContact {
     primaryPhone: string
     secondaryPhone: string
     relation: string
-}
-
-export interface RetiredReason {
-    id: number | null
-    resourceType: string
-}
-
-export interface Role {
-    id: number | null
-    resourceType: string
-}
-
-export interface MemberLocationBookmark {
-    id: number | null
-    resourceType: string
 }
 
 export interface Location {
@@ -90,12 +66,12 @@ export interface Member extends Entity {
     permission: number
     credits: number
     defaultDuty: string
-    defaultEquipmentLocation: EquipmentLocation
-    customStatus: CustomMemberStatus
+    defaultEquipmentLocation: resourceType
+    customStatus: resourceType
     location: Location
-    locationBookmark: MemberLocationBookmark
-    retiredReason: RetiredReason
-    role: Role
+    locationBookmark: resourceType
+    retiredReason: resourceType
+    role: resourceType
     primaryEmergencyContact: PrimaryEmergencyContact
     secondaryEmergencyContact: SecondaryEmergencyContact
     alertActivityApproval: boolean

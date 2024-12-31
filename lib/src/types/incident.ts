@@ -1,9 +1,5 @@
 import { Entity } from '../entity'
-
-export interface IncidentOwner {
-    resourceType: string;
-    id: number;
-}
+import { resourceType } from './type';
 
 export interface IncidentLocation {
     type: string;
@@ -23,20 +19,9 @@ export interface AddressInfo {
     town: string;
     country: string;
 }
-
-export interface IncidentLocationBookmark {
-    id: number | null;
-    resourceType: string;
-}
-
-export interface IncidentTag {
-    id: number;
-    resourceType: string;
-}
-
 export interface Incident extends Entity{
     id: number;
-    owner: IncidentOwner;
+    owner: resourceType;
     resourceType: string;
     reference: string;
     referenceDescription: string;
@@ -65,8 +50,8 @@ export interface Incident extends Entity{
     weatherCloudCover: number | null;
     address: AddressInfo;
     location: IncidentLocation;
-    locationBookmark: IncidentLocationBookmark;
+    locationBookmark: resourceType;
     fullTeam: boolean;
     selfCoordinator: boolean;
-    tags: IncidentTag[];
+    tags: resourceType[];
 }
