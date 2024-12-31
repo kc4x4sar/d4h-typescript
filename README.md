@@ -45,3 +45,13 @@ The available commands are:
 Build simply builds the test project, while launch both builds and runs it. If you've made changes to lib, be sure to build there first.
 
 Before launching, you should setup environment variables. `sample.env` shows you what variables are necessary. Copy the contents to a new file, `.env`, in the same folder and populate it appropriately.
+
+## Contributing
+
+### Updating Docs
+
+To update typedoc docs after changes to code, run in the root of the repo:
+
+```npm install```
+
+```npm run docs```

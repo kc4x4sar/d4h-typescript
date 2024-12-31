@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "docs": "npx typedoc"
+  },
   "devDependencies": {
     "@types/node": "^22.10.2",
     "d4h-typescript": "file:lib",
