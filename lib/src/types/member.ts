@@ -1,6 +1,7 @@
 import { Entity } from '../entity'
 import { resourceType } from './type'
 
+/** @ignore @inline */
 export interface MemberStatus {
     id: number
     type: string
@@ -8,39 +9,38 @@ export interface MemberStatus {
     label: MemberStatusLabel | null
 }
 
+/** @ignore @inline */
 export interface MemberStatusLabel {
     id: number
     value: string
 }
 
+/** @ignore @inline */
 export interface EmailInfo {
     value: string
     verified: boolean
 }
 
+/** @ignore @inline */
 export interface PhoneInfo {
     phone: string
     verified?: boolean
 }
 
-export interface PrimaryEmergencyContact {
+/** @ignore @inline */
+export interface emergencyContact {
     name: string
     primaryPhone: string
     secondaryPhone: string
     relation: string
 }
 
-export interface SecondaryEmergencyContact {
-    name: string
-    primaryPhone: string
-    secondaryPhone: string
-    relation: string
-}
-
+/** @inline */
 export interface Location {
     type: string
     coordinates: [number, number]
 }
+
 
 export interface Member extends Entity {
     id: number
@@ -72,8 +72,8 @@ export interface Member extends Entity {
     locationBookmark: resourceType
     retiredReason: resourceType
     role: resourceType
-    primaryEmergencyContact: PrimaryEmergencyContact
-    secondaryEmergencyContact: SecondaryEmergencyContact
+    primaryEmergencyContact: emergencyContact
+    secondaryEmergencyContact: emergencyContact
     alertActivityApproval: boolean
     alertAllQualifications: boolean
     alertGear: boolean

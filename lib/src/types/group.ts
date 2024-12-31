@@ -1,6 +1,12 @@
 import { Entity } from '../entity'
 import { resourceType } from './type';
 
+
+
+/********************************************/
+/**************** GROUPS ********************/
+/********************************************/
+
 export interface memberGroup extends Entity{
     id: number;
     title: string;
@@ -10,6 +16,13 @@ export interface memberGroup extends Entity{
     createdAt: string;
     updatedAt: string;
 }
+
+
+
+
+/********************************************/
+/*********** GROUP MEMBERSHIP ***************/
+/********************************************/
 
 export interface groupMembership extends Entity{
     id: number;

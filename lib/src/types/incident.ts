@@ -1,17 +1,20 @@
 import { Entity } from '../entity'
 import { resourceType } from './type';
 
+/** @ignore @inline */
 export interface IncidentLocation {
     type: string;
     coordinates: [number, number];
 }
 
+/** @ignore @inline */
 export interface WeatherInfo {
     symbol: string | null;
     symbolDate: string | null;
     temperature: number | null;
 }
 
+/** @ignore @inline */
 export interface AddressInfo {
     postCode: string;
     region: string;

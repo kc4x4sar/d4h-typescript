@@ -1,7 +1,7 @@
 import { CustomFieldUpdate } from './types/customField'
 import D4HRequest from './d4hRequest'
 import { Entity, EntityType } from './entity'
-import type { memberGroup } from './types/group'
+import type { groupMembership, memberGroup } from './types/group'
 import type { Member, MemberUpdate } from './types/member'
 import type { Qualification, MemberAwards } from './types/qualification'
 import type { Incident } from './types/incident'
@@ -11,7 +11,11 @@ import { animalsApi } from './api/animalsApi'
 import { qualificationsApi } from './api/qualificationsApi'
 import { groupsApi } from './api/groupsApi'
 
+
+/** D4H API Fetch Limit */
 const D4H_FETCH_LIMIT = 250
+
+/** D4H API URL */
 const D4H_BASE_URL = 'https://api.team-manager.us.d4h.com/v3' // Multiple API endpoints now, probably should handle multiple
 
 export { D4H_BASE_URL }
@@ -20,6 +24,7 @@ export interface GetMemberOptions {
     includeDetails?: boolean;
 }
 
+/** @ignore @inline */
 export interface GetMembersOptions {
     deleted?: boolean; // default: false
     id_tag?: string;
@@ -27,27 +32,30 @@ export interface GetMembersOptions {
     order?: 'asc' | 'desc'; // default: 'asc'
     page?: number;
     size?: number;
-    sort?: string | string[]; // default: 'id'
+    sort?: 'createdAt' | 'id' | 'updatedAt'; // default: 'id'
     statuses?: (number | null)[]; // list of ids or null
     team_id?: number; // the numeric identifier for a team resource
 }
 
+/** @ignore @inline */
 export interface GetAnimalsOptions {
     handler_member_id?: number | number[];
     id?: number | number[];
     order?: 'asc' | 'desc'; // default: 'asc'
     page?: number;
     size?: number;
-    sort?: string | string[]; // default: 'id'
+    sort?: 'createdAt' | 'id' | 'updatedAt'; // default: 'id'
     status?: string; // list of ids or null
     team_id?: number; // the numeric identifier for a team resource
 }
 
+/** @ignore @inline */
 export interface GetGroupsOptions {
     memberId?: number;
     title?: string;
 }
 
+/** @ignore @inline */
 export interface GetIncidentOptions {
     after?: string;
     before?: string;
@@ -59,23 +67,25 @@ export interface GetIncidentOptions {
     published?: boolean;
     reference?: string;
     size?: number;
-    sort?: string | string[]; // default: 'id'
+    sort?: 'createdAt' | 'id' | 'updatedAt'; // default: 'id'
     starts_after?: string;
     tag_bundle_id?: number;
     tag_id?: number;
     team_id?: number;
 }
 
+/** @ignore @inline */
 export interface GetQualificationOptions {
     exclude_org_data?: boolean; // default: false
     exclude_teams_data?: boolean; // default: false
     order?: 'asc' | 'desc'; // default: 'asc'
     page?: number;
     size?: number;
-    sort?: string | string[]; // default: 'id'
+    sort?: 'createdAt' | 'id' | 'updatedAt'; // default: 'id'
     title?: string;
 }
 
+/** @ignore @inline */
 export interface GetMemberAwardsOptions {
     exclude_org_data?: boolean; // default: false
     exclude_teams_data?: boolean; // default: false
@@ -84,17 +94,30 @@ export interface GetMemberAwardsOptions {
     page?: number;
     qualification_id?: number;
     size?: number;
-    sort?: string | string[]; // default: 'id'
+    sort?: 'createdAt' | 'id' | 'updatedAt'; // default: 'id'
 }
 
+/** @ignore @inline */
 export interface GetMemberGroupsOptions {
     id: number;
     order?: 'asc' | 'desc'; // default: 'asc'
     page?: number;
     size?: number;
-    sort?: string | string[]; // default: 'id'
+    sort?: 'createdAt' | 'id' | 'updatedAt'; // default: 'id'
     team_id?: number | number[];
     title?: string;
+}
+
+/** @ignore @inline */
+export interface GetMemberGroupMembershipOptions {
+    group_id: number | number[];
+    id: number | number [];
+    member_id: number | number [];
+    order?: 'asc' | 'desc'; // default: 'asc'
+    page?: number;
+    size?: number;
+    sort?: 'createdAt' | 'id' | 'updatedAt'; // default: 'id'
+    team_id?: number | number[];
 }
 
 export default class D4H {
@@ -107,7 +130,8 @@ export default class D4H {
     /********************************************/
     /**************** MEMBERS *******************/
     /********************************************/
-    
+
+    /** @category Members */
     async getMember(
         context: string,
         contextId: number,
@@ -117,6 +141,7 @@ export default class D4H {
         return membersApi.getMember(this._request, context, contextId, id, options)
     }
 
+    /** @category Members */
     async getMembers(
         context: string,
         contextId: number,
@@ -125,6 +150,7 @@ export default class D4H {
         return membersApi.getMembers(this._request, context, contextId, options)
     }
 
+    /** @category Members */
     updateMember(context: string, contextId: number, id: number, updates: MemberUpdate): Promise<void> {
         // If no updates, no need to actually make a request. Exit early.
         if (Object.getOwnPropertyNames(updates).length === 0) {
@@ -139,6 +165,7 @@ export default class D4H {
     /**************** ANIMALS *******************/
     /********************************************/
 
+    /** @category Animals */
     async getAnimal(
         context: string,
         contextId: number,
@@ -147,6 +174,7 @@ export default class D4H {
         return animalsApi.getAnimal(this._request, context, contextId, id)
     }
 
+    /** @category Animals */
     async getAnimals(
         context: string,
         contextId: number,
@@ -156,15 +184,10 @@ export default class D4H {
     }
 
     /********************************************/
-    /*********** EMERGENCY CONTACTS *************/
-    /********************************************/
-
-    // Emergency Contacts no longer have specific endpoint
-
-    /********************************************/
     /***************** GROUPS *******************/
     /********************************************/
-
+    
+    /** @category Groups */
     async getMemberGroup(
         context: string,
         contextId: number,
@@ -173,6 +196,7 @@ export default class D4H {
         return groupsApi.getMemberGroup(this._request, context, contextId, groupId)
     }
 
+    /** @category Groups */
     async getMemberGroups(
         context: string,
         contextId: number,
@@ -181,10 +205,20 @@ export default class D4H {
         return groupsApi.getMemberGroups(this._request, context, contextId, options)
     }
 
+    /** @category Groups */
+    async getMemberGroupMemberships(
+        context: string,
+        contextId: number,
+        options?: GetMemberGroupMembershipOptions
+    ): Promise<groupMembership[]> {
+        return groupsApi.getMemberGroupMemberships(this._request, context, contextId, options)
+    }
+
     /********************************************/
     /**************** INCIDENTS *****************/
     /********************************************/
 
+    /** @category Incidents */
     async getIncident(context: string, contextId: number, activityId: number): Promise<Incident> {
         const url = new URL(`${D4H_BASE_URL}/${context}/${contextId}/incidents/${activityId}`)
 
@@ -198,6 +232,7 @@ export default class D4H {
         return incident
     }
 
+    /** @category Incidents */
     async getIncidents(context: string, contextId: number, options?: GetIncidentOptions): Promise<Incident[]> {
         const url = new URL(`${D4H_BASE_URL}/${context}/${contextId}/incidents`)
 
@@ -262,6 +297,7 @@ export default class D4H {
     /************* QUALIFICATIONS ***************/
     /********************************************/
 
+    /** @category Qualifications */
     async getMemberQualification(
         context: string,
         contextId: number,
@@ -270,6 +306,7 @@ export default class D4H {
         return qualificationsApi.getMemberQualification(this._request, context, contextId, id)
     }
 
+    /** @category Qualifications */
     async getMemberQualifications(
         context: string,
         contextId: number,
@@ -278,6 +315,7 @@ export default class D4H {
         return qualificationsApi.getMemberQualifications(this._request, context, contextId, options)
     }
 
+    /** @category Qualifications */
     async getAnimalQualification(
         context: string,
         contextId: number,
@@ -286,6 +324,7 @@ export default class D4H {
         return qualificationsApi.getAnimalQualification(this._request, context, contextId, id)
     }
 
+    /** @category Qualifications */
     async getAnimalQualifications(
         context: string,
         contextId: number,
@@ -294,6 +333,7 @@ export default class D4H {
         return qualificationsApi.getAnimalQualifications(this._request, context, contextId, options)
     }
 
+    /** @category Qualifications */
     async getHandlerQualification(
         context: string,
         contextId: number,
@@ -302,6 +342,7 @@ export default class D4H {
         return qualificationsApi.getHandlerQualification(this._request, context, contextId, id)
     }
 
+    /** @category Qualifications */
     async getHandlerQualifications(
         context: string,
         contextId: number,
@@ -310,6 +351,7 @@ export default class D4H {
         return qualificationsApi.getHandlerQualifications(this._request, context, contextId, options)
     }
 
+    /** @category Qualifications */
     async getMemberAwards(
         context: string,
         contextId: number,
@@ -323,7 +365,7 @@ export default class D4H {
     /********************************************/
 
 
-
+    /** @category Custom Fields */
     updateCustomFields(entity: Entity, updates: CustomFieldUpdate[], onlyMemberEditOwn: boolean): Promise<void> {
         // If no updates, no need to actually make a request. Exit early.
         if (updates.length === 0) {
