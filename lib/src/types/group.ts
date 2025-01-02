@@ -1,5 +1,5 @@
 import { Entity } from '../entity'
-import { resourceType } from './type';
+import { resourceType } from './type'
 
 
 

@@ -1,26 +1,55 @@
 import D4HRequest from '../d4hRequest'
 import { EntityType } from '../entity'
 import type { Qualification, MemberAwards } from '../types/qualification'
-import { D4H_BASE_URL, GetQualificationOptions, GetMemberAwardsOptions } from '../d4h'
+import D4H, { D4H_BASE_URL, D4H_FETCH_LIMIT } from '../d4h'
+
+console.log(D4H_FETCH_LIMIT)
+
+/** @ignore @inline */
+export interface GetQualificationOptions {
+    exclude_org_data?: boolean; // default: false
+    exclude_teams_data?: boolean; // default: false
+    order?: 'asc' | 'desc'; // default: 'asc'
+    page?: number;
+    size?: number;
+    sort?: 'createdAt' | 'id' | 'updatedAt'; // default: 'id'
+    title?: string;
+}
+
+/** @ignore @inline */
+export interface GetMemberAwardsOptions {
+    exclude_org_data?: boolean; // default: false
+    exclude_teams_data?: boolean; // default: false
+    member_id?: number | 'me';
+    order?: 'asc' | 'desc'; // default: 'asc'
+    page?: number;
+    qualification_id?: number;
+    size?: number;
+    sort?: 'createdAt' | 'id' | 'updatedAt'; // default: 'id'
+}
 
 
+export class Qualifications {
+    private readonly _request: D4HRequest
 
-export class qualificationsApi {
-
-    static async getMemberQualification(request: D4HRequest, context: string, contextId: number, qualificationId: number | 'me'): Promise<Qualification> {
-        const url = new URL(`${D4H_BASE_URL}/${context}/${contextId}/member-qualifications/${qualificationId}`)
-
-        const qualification = await request.getAsync<Qualification>(url)
-
-        if (!qualification) {
-            throw new Error('Qualification data not found or improperly formatted.')
-        }
-        qualification.entityType = EntityType.Incident
-
-        return qualification
+    constructor(d4hInstance: D4H) {
+        this._request = d4hInstance.request
     }
 
-    static async getMemberQualifications(request: D4HRequest, context: string, contextId: number, options?: GetQualificationOptions): Promise<Qualification[]> {
+    async getMemberQualification(context: string, contextId: number, qualificationId: number | 'me'): Promise<Qualification> {
+        const url = new URL(`${D4H_BASE_URL}/${context}/${contextId}/member-qualifications/${qualificationId}`)
+
+
+        try {
+            const qualification = await this._request.getAsync<Qualification>(url)
+            qualification.entityType = EntityType.Incident
+            return qualification
+        } catch (error) {
+            throw new Error('Qualification data not found or improperly formatted.')
+        }
+    }
+
+    async getMemberQualifications(context: string, contextId: number, options?: GetQualificationOptions): Promise<Qualification[]> {
         const url = new URL(`${D4H_BASE_URL}/${context}/${contextId}/member-qualifications`)
 
         if (options !== undefined) {
@@ -45,9 +74,17 @@ export class qualificationsApi {
             }
             if (options.sort !== undefined) {
                 if (Array.isArray(options.sort)) {
-                    options.sort.forEach(sortField => optionsList.append('sort', sortField))
-                } else {
+                    options.sort.forEach(sortField => {
+                        if (typeof sortField === 'string') {
+                            optionsList.append('sort', sortField)
+                        } else {
+                            console.warn('Skipping invalid sort field: ', sortField)
+                        }
+                    })
+                } else if (typeof options.sort === 'string') {
                     optionsList.append('sort', options.sort)
+                } else {
+                    console.warn('Invalid sort field type:', typeof options.sort)
                 }
             }
 
@@ -56,24 +93,24 @@ export class qualificationsApi {
             }
         }
 
-        return request.getManyAsync(url)
+        return this._request.getManyAsync(url)
     }
 
 
-    static async getAnimalQualification(request: D4HRequest, context: string, contextId: number, qualificationId: number): Promise<Qualification> {
+    async getAnimalQualification(context: string, contextId: number, qualificationId: number): Promise<Qualification> {
         const url = new URL(`${D4H_BASE_URL}/${context}/${contextId}/animal-qualifications/${qualificationId}`)
 
-        const qualification = await request.getAsync<Qualification>(url)
 
-        if (!qualification) {
+        try {
+            const qualification = await this._request.getAsync<Qualification>(url)
+            qualification.entityType = EntityType.Qualification
+            return qualification
+        } catch (error) {
             throw new Error('Qualification data not found or improperly formatted.')
         }
-        qualification.entityType = EntityType.Qualification
-
-        return qualification
     }
 
-    static async getAnimalQualifications(request: D4HRequest, context: string, contextId: number, options?: GetQualificationOptions): Promise<Qualification[]> {
+    async getAnimalQualifications(context: string, contextId: number, options?: GetQualificationOptions): Promise<Qualification[]> {
         const url = new URL(`${D4H_BASE_URL}/${context}/${contextId}/animal-qualifications`)
 
         if (options !== undefined) {
@@ -98,9 +135,17 @@ export class qualificationsApi {
             }
             if (options.sort !== undefined) {
                 if (Array.isArray(options.sort)) {
-                    options.sort.forEach(sortField => optionsList.append('sort', sortField))
-                } else {
+                    options.sort.forEach(sortField => {
+                        if (typeof sortField === 'string') {
+                            optionsList.append('sort', sortField)
+                        } else {
+                            console.warn('Skipping invalid sort field: ', sortField)
+                        }
+                    })
+                } else if (typeof options.sort === 'string') {
                     optionsList.append('sort', options.sort)
+                } else {
+                    console.warn('Invalid sort field type:', typeof options.sort)
                 }
             }
 
@@ -109,24 +154,27 @@ export class qualificationsApi {
             }
         }
 
-        return request.getManyAsync(url)
+        const qualifications = await this._request.getManyAsync<Qualification>(url)
+        qualifications.forEach((m) => (m.entityType = EntityType.Qualification))
+
+        return qualifications
     }
 
-    static async getHandlerQualification(request: D4HRequest, context: string, contextId: number, qualificationId: number): Promise<Qualification> {
+    async getHandlerQualification(context: string, contextId: number, qualificationId: number): Promise<Qualification> {
         const url = new URL(`${D4H_BASE_URL}/${context}/${contextId}/handler-qualifications/${qualificationId}`)
 
-        const qualification = await request.getAsync<Qualification>(url)
 
-        if (!qualification) {
+        try {
+            const qualification = await this._request.getAsync<Qualification>(url)
+            qualification.entityType = EntityType.Qualification
+            return qualification
+        } catch (error) {
             throw new Error('Qualification data not found or improperly formatted.')
         }
-        qualification.entityType = EntityType.Qualification
-
-        return qualification
     }
 
 
-    static async getHandlerQualifications(request: D4HRequest, context: string, contextId: number, options?: GetQualificationOptions): Promise<Qualification[]> {
+    async getHandlerQualifications(context: string, contextId: number, options?: GetQualificationOptions): Promise<Qualification[]> {
         const url = new URL(`${D4H_BASE_URL}/${context}/${contextId}/handler-qualifications`)
 
         if (options !== undefined) {
@@ -151,9 +199,17 @@ export class qualificationsApi {
             }
             if (options.sort !== undefined) {
                 if (Array.isArray(options.sort)) {
-                    options.sort.forEach(sortField => optionsList.append('sort', sortField))
-                } else {
+                    options.sort.forEach(sortField => {
+                        if (typeof sortField === 'string') {
+                            optionsList.append('sort', sortField)
+                        } else {
+                            console.warn('Skipping invalid sort field: ', sortField)
+                        }
+                    })
+                } else if (typeof options.sort === 'string') {
                     optionsList.append('sort', options.sort)
+                } else {
+                    console.warn('Invalid sort field type:', typeof options.sort)
                 }
             }
 
@@ -162,10 +218,13 @@ export class qualificationsApi {
             }
         }
 
-        return request.getManyAsync(url)
+        const qualifications = await this._request.getManyAsync<Qualification>(url)
+        qualifications.forEach((m) => (m.entityType = EntityType.Qualification))
+
+        return qualifications
     }
 
-    static async getMemberAwards(request: D4HRequest, context: string, contextId: number, options?: GetMemberAwardsOptions): Promise<MemberAwards[]> {
+    async getMemberAwards(context: string, contextId: number, options?: GetMemberAwardsOptions): Promise<MemberAwards[]> {
         const url = new URL(`${D4H_BASE_URL}/${context}/${contextId}/member-qualification-awards`)
 
         if (options !== undefined) {
@@ -198,14 +257,22 @@ export class qualificationsApi {
             }
             if (options.sort !== undefined) {
                 if (Array.isArray(options.sort)) {
-                    options.sort.forEach(sortField => optionsList.append('sort', sortField))
-                } else {
+                    options.sort.forEach(sortField => {
+                        if (typeof sortField === 'string') {
+                            optionsList.append('sort', sortField)
+                        } else {
+                            console.warn('Skipping invalid sort field: ', sortField)
+                        }
+                    })
+                } else if (typeof options.sort === 'string') {
                     optionsList.append('sort', options.sort)
+                } else {
+                    console.warn('Invalid sort field type:', typeof options.sort)
                 }
             }
         }
 
-        const awards = await request.getManyAsync<MemberAwards>(url)
+        const awards = await this._request.getManyAsync<MemberAwards>(url)
         awards.forEach((m) => (m.entityType = EntityType.Award))
 
         return awards

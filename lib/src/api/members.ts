@@ -1,11 +1,37 @@
 import D4HRequest from '../d4hRequest'
 import { EntityType } from '../entity'
 import type { Member } from '../types/member'
-import { GetMemberOptions, GetMembersOptions, D4H_BASE_URL } from '../d4h'
+import D4H, { D4H_BASE_URL } from '../d4h'
+import type { MemberUpdate } from '../types/member'
 
-export class membersApi {
-    static async getMember(
-        request: D4HRequest,
+
+/** @ignore @inline */
+export interface GetMemberOptions {
+    includeDetails?: boolean;
+}
+
+/** @ignore @inline */
+export interface GetMembersOptions {
+    deleted?: boolean; // default: false
+    id_tag?: string;
+    name?: string;
+    order?: 'asc' | 'desc'; // default: 'asc'
+    page?: number;
+    size?: number;
+    sort?: 'createdAt' | 'id' | 'updatedAt'; // default: 'id'
+    statuses?: (number | null)[]; // list of ids or null
+    team_id?: number; // the numeric identifier for a team resource
+}
+
+export class Members {
+    private readonly _request: D4HRequest
+
+    constructor(d4hInstance: D4H) {
+        this._request = d4hInstance.request
+    }
+
+
+    async getMember(
         context: string,
         contextId: number,
         id: number | 'me',
@@ -21,18 +47,16 @@ export class membersApi {
             }
         }
 
-        const member = await request.getAsync<Member>(url)
-
-        if (!member) {
+        try {
+            const member = await this._request.getAsync<Member>(url)
+            member.entityType = EntityType.Member
+            return member
+        } catch (error) {
             throw new Error('Member data not found or improperly formatted.')
         }
-        member.entityType = EntityType.Member
-
-        return member
     }
 
-    static async getMembers(
-        request: D4HRequest,
+    async getMembers(
         context: string,
         contextId: number,
         options?: GetMembersOptions
@@ -68,9 +92,17 @@ export class membersApi {
 
             if (options.sort !== undefined) {
                 if (Array.isArray(options.sort)) {
-                    options.sort.forEach((sortField) => optionsList.append('sort', sortField))
-                } else {
+                    options.sort.forEach(sortField => {
+                        if (typeof sortField === 'string') {
+                            optionsList.append('sort', sortField)
+                        } else {
+                            console.warn('Skipping invalid sort field: ', sortField)
+                        }
+                    })
+                } else if (typeof options.sort === 'string') {
                     optionsList.append('sort', options.sort)
+                } else {
+                    console.warn('Invalid sort field type:', typeof options.sort)
                 }
             }
 
@@ -89,9 +121,21 @@ export class membersApi {
             }
         }
 
-        const members = await request.getManyAsync<Member>(url)
+        const members = await this._request.getManyAsync<Member>(url)
         members.forEach((m) => (m.entityType = EntityType.Member))
 
         return members
     }
+
+    /** @category Members */
+    updateMember(context: string, contextId: number, id: number, updates: MemberUpdate): Promise<void> {
+        // If no updates, no need to actually make a request. Exit early.
+        if (Object.getOwnPropertyNames(updates).length === 0) {
+            return Promise.resolve()
+        }
+
+        const url = new URL(`${D4H_BASE_URL}/${context}/${contextId}/members/${id}`)
+        return this._request.putAsync(url, updates)
+    }
+
 }

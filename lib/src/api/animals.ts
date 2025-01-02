@@ -1,25 +1,41 @@
 import D4HRequest from '../d4hRequest'
 import { EntityType } from '../entity'
 import type { Animal } from '../types/animal'
-import { GetAnimalsOptions, D4H_BASE_URL } from '../d4h'
-
-export class animalsApi {
+import D4H, { D4H_BASE_URL } from '../d4h'
 
 
-    static async getAnimal(request: D4HRequest, context: string, contextId: number, animalId: number | 'me'): Promise<Animal> {
-        const url = new URL(`${D4H_BASE_URL}/${context}/${contextId}/animals/${animalId}`)
+/** @ignore @inline */
+export interface GetAnimalsOptions {
+    handler_member_id?: number | number[];
+    id?: number | number[];
+    order?: 'asc' | 'desc'; // default: 'asc'
+    page?: number;
+    size?: number;
+    sort?: 'createdAt' | 'id' | 'updatedAt'; // default: 'id'
+    status?: string; // list of ids or null
+    team_id?: number; // the numeric identifier for a team resource
+}
 
-        const animal = await request.getAsync<Animal>(url)
-        
-        if (!animal) {
-            throw new Error('Animal data not found or improperly formatted.')
-        }
-        animal.entityType = EntityType.Animal
+export class Animals {
+    private readonly _request: D4HRequest
 
-        return animal
+    constructor(d4hInstance: D4H) {
+        this._request = d4hInstance.request
     }
 
-    static async getAnimals(request: D4HRequest, context: string, contextId: number, options?: GetAnimalsOptions): Promise<Animal[]> {
+    async getAnimal(context: string, contextId: number, animalId: number | 'me'): Promise<Animal> {
+        const url = new URL(`${D4H_BASE_URL}/${context}/${contextId}/animals/${animalId}`)
+        
+        try {
+            const animal = await this._request.getAsync<Animal>(url)
+            animal.entityType = EntityType.Animal
+            return animal
+        } catch (error) {
+            throw new Error('Animal data not found or improperly formatted.')
+        }
+    }
+
+    async getAnimals(context: string, contextId: number, options?: GetAnimalsOptions): Promise<Animal[]> {
         const url = new URL(`${D4H_BASE_URL}/${context}/${contextId}/animals`)
 
         if (options !== undefined) {
@@ -46,9 +62,17 @@ export class animalsApi {
     
             if (options.sort !== undefined) {
                 if (Array.isArray(options.sort)) {
-                    options.sort.forEach(sortField => optionsList.append('sort', sortField))
-                } else {
+                    options.sort.forEach(sortField => {
+                        if (typeof sortField === 'string') {
+                            optionsList.append('sort', sortField)
+                        } else {
+                            console.warn('Skipping invalid sort field: ', sortField)
+                        }
+                    })
+                } else if (typeof options.sort === 'string') {
                     optionsList.append('sort', options.sort)
+                } else {
+                    console.warn('Invalid sort field type:', typeof options.sort)
                 }
             }
     
@@ -62,7 +86,7 @@ export class animalsApi {
             
         }
 
-        const animals = await request.getManyAsync<Animal>(url)
+        const animals = await this._request.getManyAsync<Animal>(url)
         animals.forEach(m => m.entityType = EntityType.Animal)
 
         return animals

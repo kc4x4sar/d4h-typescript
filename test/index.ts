@@ -10,8 +10,8 @@ const token = env["D4H_TOKEN"]!;
 let api = new D4H(token);
 
 let getMembersOptions: GetMembersOptions = {
-    includeDetails: true,
-    includeCustomFields: true,
+//    includeDetails: true,
+//    includeCustomFields: true,
 };
 
 let main = async function() {
@@ -33,7 +33,7 @@ let main = async function() {
         try {
             const context = 'team'
             const contextId = 1234
-            const members = await api.getMembersAsync(context, contextId, getMembersOptions)
+            const members = await api.getMembers(context, contextId, getMembersOptions)
             console.log(`Retrieved ${members.length} members.`)
         } catch (err) {
             console.log(JSON.stringify(err))
@@ -45,7 +45,7 @@ let main = async function() {
         try {
             const context = 'team'
             const contextId = 1234
-            const groups = await api.getGroupsAsync(context, contextId)
+            const groups = await api.groups.getMemberGroups(context, contextId)
             console.log(`Retrieved ${groups.length} groups.`)
         } catch (err) {
             console.log(JSON.stringify(err))
@@ -58,7 +58,7 @@ let main = async function() {
             const context = 'team'
             const contextId = 1234
             const memberId = 103636
-            const member = await api.getMemberAsync(context, contextId, memberId, { includeDetails: true })
+            const member = await api.getMember(context, contextId, memberId, { includeDetails: true })
             console.log(`Retrieved single member: ${member.name}`)
     
             // Only execute update code on an instance where that's OK.
