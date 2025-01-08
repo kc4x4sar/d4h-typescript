@@ -12,7 +12,7 @@ export interface GetAnimalsOptions {
     page?: number;
     size?: number;
     sort?: 'createdAt' | 'id' | 'updatedAt'; // default: 'id'
-    status?: string; // list of ids or null
+    status?: 'NON_OPERATIONAL' | 'OPERATIONAL'; // list of ids or null
     team_id?: number; // the numeric identifier for a team resource
 }
 
@@ -23,7 +23,14 @@ export class Animals {
         this._request = d4hInstance.request
     }
 
-    async getAnimal(context: string, contextId: number, animalId: number | 'me'): Promise<Animal> {
+
+    /**
+     * @param context - The point of view from where the request takes place
+     * @param contextId - Either a team, organisation or admin's id
+     * @param animalId - An animal id
+     * @returns - An animal item
+     */
+    async getAnimal(context: 'admin' | 'organisation' | 'team', contextId: number, animalId: number | 'me'): Promise<Animal> {
         const url = new URL(`${D4H_BASE_URL}/${context}/${contextId}/animals/${animalId}`)
         
         try {
@@ -35,7 +42,21 @@ export class Animals {
         }
     }
 
-    async getAnimals(context: string, contextId: number, options?: GetAnimalsOptions): Promise<Animal[]> {
+
+    /**
+     * @param context - The point of view from where the request takes place
+     * @param contextId - Either a team, organisation or admin's id
+     * @param options.handler_member_id - The member id or ids of the animal's handler(s)
+     * @param options.id - A list of ids
+     * @param options.order -  Default: "asc"
+     * @param options.page - Page number
+     * @param options.size - Items per page
+     * @param options.sort -  Default: "id"
+     * @param options.status - The status of the animal
+     * @param options.team_id - The numeric identifier for a resource
+     * @returns - A list of animals
+     */
+    async getAnimals(context: 'admin' | 'organisation' | 'team', contextId: number, options?: GetAnimalsOptions): Promise<Animal[]> {
         const url = new URL(`${D4H_BASE_URL}/${context}/${contextId}/animals`)
 
         if (options !== undefined) {

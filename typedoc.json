@@ -6,6 +6,7 @@
     "sidebarLinks": {
         "Github Repo": "https://github.com/kc4x4sar/d4h-typescript"
     },
+    "projectDocuments": ["documents/install.md", "documents/using.md", "documents/examples.md", "documents/contributing.md"],
     "navigation": {
         "includeCategories": true,
         "includeGroups": false,

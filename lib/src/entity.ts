@@ -18,5 +18,9 @@ export enum EntityType {
     Incident = 'incident',
     Qualification = 'qualification',
     Award = 'award',
-    Animal = 'animal'
+    Animal = 'animal',
+    Team = 'team',
+    Organisation = 'organisation',
+    Role = 'role',
+    Activity = 'activity'
 }

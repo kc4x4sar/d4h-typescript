@@ -6,6 +6,12 @@ import D4H, { D4H_BASE_URL, D4H_FETCH_LIMIT } from '../d4h'
 console.log(D4H_FETCH_LIMIT)
 
 /** @ignore @inline */
+export interface GetOneQualificationOptions {
+    exclude_org_data?: boolean;
+    exclude_teams_data?: boolean;
+}
+
+/** @ignore @inline */
 export interface GetQualificationOptions {
     exclude_org_data?: boolean; // default: false
     exclude_teams_data?: boolean; // default: false
@@ -36,9 +42,29 @@ export class Qualifications {
         this._request = d4hInstance.request
     }
 
-    async getMemberQualification(context: string, contextId: number, qualificationId: number | 'me'): Promise<Qualification> {
+
+    /**
+     * 
+     * @param context - The point of view from where the request takes place
+     * @param contextId - Either a team, organisation or admin's id
+     * @param qualificationId - The qualification's id
+     * @param options.exclude_org_data - Team context: Exclude entities inherited from the team's org
+     * @param options.exclude_teams_data - Organisation context: Exclude entities belonging to accessible teams
+     * @returns - A member qualification
+     */
+    async getMemberQualification(context: 'admin' | 'organisation' | 'team', contextId: number, qualificationId: number | 'me', options?: GetOneQualificationOptions): Promise<Qualification> {
         const url = new URL(`${D4H_BASE_URL}/${context}/${contextId}/member-qualifications/${qualificationId}`)
 
+        if (options !== undefined) {
+            const optionsList = url.searchParams
+
+            if (options.exclude_org_data !== undefined) {
+                optionsList.append('exclude_org_data', options.exclude_org_data.toString())
+            }
+            if (options.exclude_teams_data !== undefined) {
+                optionsList.append('exclude_teams_data', options.exclude_teams_data.toString())
+            }
+        }
 
         try {
             const qualification = await this._request.getAsync<Qualification>(url)
@@ -49,7 +75,21 @@ export class Qualifications {
         }
     }
 
-    async getMemberQualifications(context: string, contextId: number, options?: GetQualificationOptions): Promise<Qualification[]> {
+
+    /**
+     * 
+     * @param context - The point of view from where the request takes place
+     * @param contextId - Either a team, organisation or admin's id
+     * @param options.exclude_org_data - Team context: Exclude entities inherited from the team's org
+     * @param options.exclude_teams_data - Organisation context: Exclude entities belonging to accessible teams
+     * @param options.order - Default: "asc"
+     * @param options.page - Page number
+     * @param options.size - Items per page
+     * @param options.sort -  Default: "id"
+     * @param options.title - The title of a resource
+     * @returns - A list of member qualifications
+     */
+    async getMemberQualifications(context: 'admin' | 'organisation' | 'team', contextId: number, options?: GetQualificationOptions): Promise<Qualification[]> {
         const url = new URL(`${D4H_BASE_URL}/${context}/${contextId}/member-qualifications`)
 
         if (options !== undefined) {
@@ -97,9 +137,28 @@ export class Qualifications {
     }
 
 
-    async getAnimalQualification(context: string, contextId: number, qualificationId: number): Promise<Qualification> {
+    /**
+     * 
+     * @param context - The point of view from where the request takes place
+     * @param contextId - Either a team, organisation or admin's id
+     * @param qualificationId - The qualification's id
+     * @param options.exclude_org_data - Team context: Exclude entities inherited from the team's org
+     * @param options.exclude_teams_data - Organisation context: Exclude entities belonging to accessible teams
+     * @returns - An animal qualification
+     */
+    async getAnimalQualification(context: 'admin' | 'organisation' | 'team', contextId: number, qualificationId: number, options?: GetOneQualificationOptions): Promise<Qualification> {
         const url = new URL(`${D4H_BASE_URL}/${context}/${contextId}/animal-qualifications/${qualificationId}`)
 
+        if (options !== undefined) {
+            const optionsList = url.searchParams
+
+            if (options.exclude_org_data !== undefined) {
+                optionsList.append('exclude_org_data', options.exclude_org_data.toString())
+            }
+            if (options.exclude_teams_data !== undefined) {
+                optionsList.append('exclude_teams_data', options.exclude_teams_data.toString())
+            }
+        }
 
         try {
             const qualification = await this._request.getAsync<Qualification>(url)
@@ -110,7 +169,21 @@ export class Qualifications {
         }
     }
 
-    async getAnimalQualifications(context: string, contextId: number, options?: GetQualificationOptions): Promise<Qualification[]> {
+
+    /**
+     * 
+     * @param context - The point of view from where the request takes place
+     * @param contextId - Either a team, organisation or admin's id
+     * @param options.exclude_org_data - Team context: Exclude entities inherited from the team's org
+     * @param options.exclude_teams_data - Organisation context: Exclude entities belonging to accessible teams
+     * @param options.order - Default: "asc"
+     * @param options.page - Page number
+     * @param options.size - Items per page
+     * @param options.sort -  Default: "id"
+     * @param options.title - The title of a resource
+     * @returns - A list of animal qualifications
+     */
+    async getAnimalQualifications(context: 'admin' | 'organisation' | 'team', contextId: number, options?: GetQualificationOptions): Promise<Qualification[]> {
         const url = new URL(`${D4H_BASE_URL}/${context}/${contextId}/animal-qualifications`)
 
         if (options !== undefined) {
@@ -160,9 +233,29 @@ export class Qualifications {
         return qualifications
     }
 
-    async getHandlerQualification(context: string, contextId: number, qualificationId: number): Promise<Qualification> {
+
+    /**
+     * 
+     * @param context - The point of view from where the request takes place
+     * @param contextId - Either a team, organisation or admin's id
+     * @param qualificationId - The qualification's id
+     * @param options.exclude_org_data - Team context: Exclude entities inherited from the team's org
+     * @param options.exclude_teams_data - Organisation context: Exclude entities belonging to accessible teams
+     * @returns - An animal qualification
+     */
+    async getHandlerQualification(context: 'admin' | 'organisation' | 'team', contextId: number, qualificationId: number, options?: GetOneQualificationOptions): Promise<Qualification> {
         const url = new URL(`${D4H_BASE_URL}/${context}/${contextId}/handler-qualifications/${qualificationId}`)
 
+        if (options !== undefined) {
+            const optionsList = url.searchParams
+
+            if (options.exclude_org_data !== undefined) {
+                optionsList.append('exclude_org_data', options.exclude_org_data.toString())
+            }
+            if (options.exclude_teams_data !== undefined) {
+                optionsList.append('exclude_teams_data', options.exclude_teams_data.toString())
+            }
+        }
 
         try {
             const qualification = await this._request.getAsync<Qualification>(url)
@@ -174,7 +267,20 @@ export class Qualifications {
     }
 
 
-    async getHandlerQualifications(context: string, contextId: number, options?: GetQualificationOptions): Promise<Qualification[]> {
+    /**
+    * 
+    * @param context - The point of view from where the request takes place
+    * @param contextId - Either a team, organisation or admin's id
+    * @param options.exclude_org_data - Team context: Exclude entities inherited from the team's org
+    * @param options.exclude_teams_data - Organisation context: Exclude entities belonging to accessible teams
+    * @param options.order - Default: "asc"
+    * @param options.page - Page number
+    * @param options.size - Items per page
+    * @param options.sort -  Default: "id"
+    * @param options.title - The title of a resource
+    * @returns - A list of animal qualifications
+    */
+    async getHandlerQualifications(context: 'admin' | 'organisation' | 'team', contextId: number, options?: GetQualificationOptions): Promise<Qualification[]> {
         const url = new URL(`${D4H_BASE_URL}/${context}/${contextId}/handler-qualifications`)
 
         if (options !== undefined) {
@@ -224,7 +330,22 @@ export class Qualifications {
         return qualifications
     }
 
-    async getMemberAwards(context: string, contextId: number, options?: GetMemberAwardsOptions): Promise<MemberAwards[]> {
+
+    /**
+    * 
+    * @param context - The point of view from where the request takes place
+    * @param contextId - Either a team, organisation or admin's id
+    * @param options.exclude_org_data - Team context: Exclude entities inherited from the team's org
+    * @param options.exclude_teams_data - Organisation context: Exclude entities belonging to accessible teams
+    * @param options.member_id - Qualified member. Either an id or "me"
+    * @param options.order - Default: "asc"
+    * @param options.page - Page number
+    * @param options.qualification_id - The qualification's id
+    * @param options.size - Items per page
+    * @param options.sort -  Default: "id"
+    * @returns - A list of member qualification awards
+    */
+    async getMemberAwards(context: 'admin' | 'organisation' | 'team', contextId: number, options?: GetMemberAwardsOptions): Promise<MemberAwards[]> {
         const url = new URL(`${D4H_BASE_URL}/${context}/${contextId}/member-qualification-awards`)
 
         if (options !== undefined) {

@@ -10,12 +10,13 @@ export interface GetMemberOptions {
     includeDetails?: boolean;
 }
 
-/** @ignore @inline */
+/** @inline */
 export interface GetMembersOptions {
     deleted?: boolean; // default: false
+    id?: number | number[]
     id_tag?: string;
     name?: string;
-    order?: 'asc' | 'desc'; // default: 'asc'
+    order?: 'asc' | 'desc'; /** @defaultValue asc */
     page?: number;
     size?: number;
     sort?: 'createdAt' | 'id' | 'updatedAt'; // default: 'id'
@@ -31,8 +32,15 @@ export class Members {
     }
 
 
+    /**
+     * 
+     * @param context - The point of view from where the request takes place
+     * @param contextId - Either a team, organisation or admin's id
+     * @param id - Member the resource belongs to. Either an id or "me"
+     * @returns - A member
+     */
     async getMember(
-        context: string,
+        context: 'admin' | 'organisation' | 'team',
         contextId: number,
         id: number | 'me',
         options?: GetMemberOptions
@@ -56,8 +64,25 @@ export class Members {
         }
     }
 
+
+    /**
+     * 
+     * @param context - The point of view from where the request takes place
+     * @param contextId - Either a team, organisation or admin's id
+     * @param options.deleted - Return only deleted members
+     * @param options.id - A list of ids
+     * @param options.id_tag - RFID tag or barcode
+     * @param options.name - The member's name
+     * @param options.order - 
+     * @param options.page - Page number
+     * @param options.size - Items per page
+     * @param options.sort - 
+     * @param options.statuses - One or more member statuses. Some statuses require extra permissions.
+     * @param options.team_id - The numeric identifier for a resource
+     * @returns - A list of members
+     */
     async getMembers(
-        context: string,
+        context: 'admin' | 'organisation' | 'team',
         contextId: number,
         options?: GetMembersOptions
     ): Promise<Member[]> {
@@ -68,6 +93,10 @@ export class Members {
 
             if (options.deleted !== undefined) {
                 optionsList.append('deleted', options.deleted.toString())
+            }
+
+            if (options.id !== undefined) {
+                optionsList.append('id', options.id.toString())
             }
 
             if (options.id_tag !== undefined) {
@@ -127,7 +156,15 @@ export class Members {
         return members
     }
 
-    /** @category Members */
+
+    /**
+     * 
+     * @param context 
+     * @param contextId 
+     * @param id 
+     * @param updates 
+     * @returns 
+     */
     updateMember(context: string, contextId: number, id: number, updates: MemberUpdate): Promise<void> {
         // If no updates, no need to actually make a request. Exit early.
         if (Object.getOwnPropertyNames(updates).length === 0) {

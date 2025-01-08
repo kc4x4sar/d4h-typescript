@@ -10,9 +10,6 @@ class CustomFields {
         this._request = d4hInstance.request
     }
 
-
-
-    /** @category Custom Fields */
     updateCustomFields(entity: Entity, updates: CustomFieldUpdate[], onlyMemberEditOwn: boolean): Promise<void> {
         // If no updates, no need to actually make a request. Exit early.
         if (updates.length === 0) {

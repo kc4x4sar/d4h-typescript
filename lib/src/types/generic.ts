@@ -1,4 +1,4 @@
-//type.ts
+//generic.ts
 
 // Reusable interface, used in many other interfaces
 
