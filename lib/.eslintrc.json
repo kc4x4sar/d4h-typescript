@@ -20,6 +20,7 @@
     "plugins": [
         "@typescript-eslint"
     ],
+    "ignorePatterns": ["d4hWebClient.ts"],
     "rules": {
         "indent": [
             "error",

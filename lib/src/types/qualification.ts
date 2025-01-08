@@ -1,9 +1,5 @@
 import { Entity } from '../entity'
-
-export interface Resource {
-    resourceType: string;
-    id: number;
-}
+import { resourceType } from './generic'
 
 export interface Qualification extends Entity {
     id: number,
@@ -26,7 +22,7 @@ export interface MemberAwards extends Entity {
     resourceType: string;
     startsAt: string | null;
     endsAt: string | null;
-    owner: Resource;
-    member: Resource;
-    qualification: Resource;
+    owner: resourceType;
+    member: resourceType;
+    qualification: resourceType;
 }

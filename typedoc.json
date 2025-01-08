@@ -1,6 +1,19 @@
+// typedoc.json
 {
     "$schema": "https://typedoc.org/schema.json",
     "entryPoints": ["./lib/index.ts"],
-    "out": "docs"
+    "out": "docs",
+    "sidebarLinks": {
+        "Github Repo": "https://github.com/kc4x4sar/d4h-typescript"
+    },
+    "projectDocuments": ["documents/install.md", "documents/using.md", "documents/examples.md", "documents/contributing.md"],
+    "navigation": {
+        "includeCategories": true,
+        "includeGroups": false,
+        "includeFolders": true,
+        "compactFolders": false,
+        "excludeReferences": true
+    },
+    "categorizeByGroup": false
 }
 

@@ -1,21 +1,20 @@
 import { Entity } from '../entity'
+import { resourceType } from './generic'
 
-export interface IncidentOwner {
-    resourceType: string;
-    id: number;
-}
-
+/** @ignore @inline */
 export interface IncidentLocation {
     type: string;
     coordinates: [number, number];
 }
 
+/** @ignore @inline */
 export interface WeatherInfo {
     symbol: string | null;
     symbolDate: string | null;
     temperature: number | null;
 }
 
+/** @ignore @inline */
 export interface AddressInfo {
     postCode: string;
     region: string;
@@ -23,20 +22,9 @@ export interface AddressInfo {
     town: string;
     country: string;
 }
-
-export interface IncidentLocationBookmark {
-    id: number | null;
-    resourceType: string;
-}
-
-export interface IncidentTag {
-    id: number;
-    resourceType: string;
-}
-
 export interface Incident extends Entity{
     id: number;
-    owner: IncidentOwner;
+    owner: resourceType;
     resourceType: string;
     reference: string;
     referenceDescription: string;
@@ -65,8 +53,8 @@ export interface Incident extends Entity{
     weatherCloudCover: number | null;
     address: AddressInfo;
     location: IncidentLocation;
-    locationBookmark: IncidentLocationBookmark;
+    locationBookmark: resourceType;
     fullTeam: boolean;
     selfCoordinator: boolean;
-    tags: IncidentTag[];
+    tags: resourceType[];
 }

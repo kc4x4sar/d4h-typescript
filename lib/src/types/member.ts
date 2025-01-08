@@ -1,5 +1,7 @@
 import { Entity } from '../entity'
+import { resourceType } from './generic'
 
+/** @ignore @inline */
 export interface MemberStatus {
     id: number
     type: string
@@ -7,64 +9,38 @@ export interface MemberStatus {
     label: MemberStatusLabel | null
 }
 
+/** @ignore @inline */
 export interface MemberStatusLabel {
     id: number
     value: string
 }
 
-export interface CustomMemberStatus {
-    id: number | null
-    resourceType: string
-}
-
-export interface EquipmentLocation {
-    id: number | null
-    resourceType: string
-}
-
+/** @ignore @inline */
 export interface EmailInfo {
     value: string
     verified: boolean
 }
 
+/** @ignore @inline */
 export interface PhoneInfo {
     phone: string
     verified?: boolean
 }
 
-export interface PrimaryEmergencyContact {
+/** @ignore @inline */
+export interface emergencyContact {
     name: string
     primaryPhone: string
     secondaryPhone: string
     relation: string
 }
 
-export interface SecondaryEmergencyContact {
-    name: string
-    primaryPhone: string
-    secondaryPhone: string
-    relation: string
-}
-
-export interface RetiredReason {
-    id: number | null
-    resourceType: string
-}
-
-export interface Role {
-    id: number | null
-    resourceType: string
-}
-
-export interface MemberLocationBookmark {
-    id: number | null
-    resourceType: string
-}
-
+/** @inline */
 export interface Location {
     type: string
     coordinates: [number, number]
 }
+
 
 export interface Member extends Entity {
     id: number
@@ -90,14 +66,14 @@ export interface Member extends Entity {
     permission: number
     credits: number
     defaultDuty: string
-    defaultEquipmentLocation: EquipmentLocation
-    customStatus: CustomMemberStatus
+    defaultEquipmentLocation: resourceType
+    customStatus: resourceType
     location: Location
-    locationBookmark: MemberLocationBookmark
-    retiredReason: RetiredReason
-    role: Role
-    primaryEmergencyContact: PrimaryEmergencyContact
-    secondaryEmergencyContact: SecondaryEmergencyContact
+    locationBookmark: resourceType
+    retiredReason: resourceType
+    role: resourceType
+    primaryEmergencyContact: emergencyContact
+    secondaryEmergencyContact: emergencyContact
     alertActivityApproval: boolean
     alertAllQualifications: boolean
     alertGear: boolean

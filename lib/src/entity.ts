@@ -14,8 +14,13 @@ export interface Entity {
 export enum EntityType {
     Member = 'member',
     memberGroup = 'membergroup',
+    groupMembership = 'groupmembership',
     Incident = 'incident',
     Qualification = 'qualification',
     Award = 'award',
-    Animal = 'animal'
+    Animal = 'animal',
+    Team = 'team',
+    Organisation = 'organisation',
+    Role = 'role',
+    Activity = 'activity'
 }
