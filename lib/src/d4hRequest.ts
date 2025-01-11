@@ -58,33 +58,32 @@ export default class D4HRequest {
         return this.requestAsync<never, DataType>(url, HttpMethod.Get)
     }
 
-    async getManyAsync<DataType>(url: URL, paginate: boolean = false): Promise<DataType[]> {
+    async getManyAsync<DataType>(url: URL, paginate = false): Promise<DataType[]> {
         let results: DataType[] = []
 
 
         if (paginate) {
             let offset = 0
-    
+            let hasMore = true
+
             // Pagination loop
-            while (true) {
+            while (hasMore) {
                 const urlWithOffset = new URL(url)
                 urlWithOffset.searchParams.append('offset', offset.toString())
                 urlWithOffset.searchParams.append('limit', this._fetchLimit.toString())
-    
+
                 const newResults = await this.getAsync<DataType[]>(urlWithOffset)
                 results = results.concat(newResults)
                 offset += this._fetchLimit
-    
-                if (newResults.length < this._fetchLimit) {
-                    break
-                }
+
+                hasMore = newResults.length === this._fetchLimit
             }
         } else {
             // Fetch without pagination
             const newResults = await this.getAsync<DataType[]>(url)
             results = results.concat(newResults)
         }
-    
+
         return results
     }
 

@@ -1,3 +1,4 @@
+/** @ignore @inline */
 export enum CustomFieldType {
     Number = 'number',
     Text = 'text',
@@ -14,6 +15,7 @@ export interface CustomField {
     member_edit_own: boolean;
 }
 
+/** @ignore @inline */
 export interface CustomFieldUpdate {
     id: number;
     value: string | null;
